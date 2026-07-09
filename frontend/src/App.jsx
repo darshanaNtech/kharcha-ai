@@ -46,7 +46,7 @@ function App() {
       setTranscript(spokenText); 
 
       try {
-        const aiResponse = await fetch("http://localhost:5001/api/analyze", {
+        const aiResponse = await fetch("https://kharcha-ai-fgr3.onrender.com/api/expenses", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text: spokenText })
@@ -64,7 +64,7 @@ function App() {
         }
         const extractedExpense = JSON.parse(jsonMatch[0]);
 
-        const saveResponse = await fetch("http://localhost:5001/api/expenses", {
+        const saveResponse = await fetch("https://kharcha-ai-fgr3.onrender.com/api/expenses", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(extractedExpense)
@@ -100,7 +100,7 @@ function App() {
       const base64String = reader.result.split(',')[1];
 
       try {
-        const response = await fetch('http://localhost:5001/api/scan-receipt', {
+        const response = await fetch('https://kharcha-ai-fgr3.onrender.com/api/expenses', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ imageBase64: base64String })

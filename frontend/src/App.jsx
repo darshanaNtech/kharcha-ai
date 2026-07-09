@@ -22,7 +22,7 @@ function App() {
 
   useEffect(() => {
     loadExpenses();
-  }, []); // Now ESLint is happy!
+  }, [loadExpenses]); // Now ESLint is happy!
 
   const startListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;

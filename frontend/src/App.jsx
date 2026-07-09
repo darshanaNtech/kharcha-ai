@@ -20,7 +20,7 @@ function App() {
     }
   }, []);
 
-  uuseEffect(() => {
+  useEffect(() => {
   const initializeExpenses = async () => {
     await loadExpenses();
   };

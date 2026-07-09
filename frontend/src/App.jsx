@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import ExpenseChart from "./ExpenseChart";
 
 function App() {
-  const myBrokenVariable = "I am a bug!";
   const [expenses, setExpenses] = useState([]);
   const [nameInput, setNameInput] = useState('');
   const [amountInput, setAmountInput] = useState('');

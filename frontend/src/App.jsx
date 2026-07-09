@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-// 1. Imported the ExpenseChart component at the top
+import { useState, useEffect, useCallback } from 'react';
 import ExpenseChart from "./ExpenseChart";
 
 function App() {
@@ -10,7 +9,8 @@ function App() {
   const [isListening, setIsListening] = useState(false); 
   const [isScanning, setIsScanning] = useState(false);
 
-  const loadExpenses = async () => {
+  // We wrap this in useCallback so ESLint knows it is safe to use in useEffect
+  const loadExpenses = useCallback(async () => {
     try {
       const response = await fetch("http://localhost:5001/api/expenses");
       const realData = await response.json();
@@ -18,11 +18,11 @@ function App() {
     } catch (error) {
       console.error("Failed to load expenses from database:", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadExpenses();
-  }, []);
+  }, [loadExpenses]); // Now ESLint is happy!
 
   const startListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -44,7 +44,6 @@ function App() {
       setTranscript(spokenText); 
 
       try {
-        // A. Send spoken text to backend
         const aiResponse = await fetch("http://localhost:5001/api/analyze", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -57,14 +56,12 @@ function App() {
         
         const aiData = await aiResponse.json();
 
-        // BULLETPROOF EXTRACTION: Find the JSON block directly between { and }
         const jsonMatch = aiData.result.match(/\{([\s\S]*)\}/);
         if (!jsonMatch) {
           throw new Error("AI response format invalid. No JSON object block found.");
         }
         const extractedExpense = JSON.parse(jsonMatch[0]);
 
-        // B. Save to Database
         const saveResponse = await fetch("http://localhost:5001/api/expenses", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -75,7 +72,6 @@ function App() {
           throw new Error(`Database save route returned status ${saveResponse.status}`);
         }
 
-        // C. Refresh screen layout
         loadExpenses();
       } catch (error) {
         console.error("Pipeline Error Trace:", error);
@@ -207,11 +203,8 @@ function App() {
           )}
         </div>
 
-        {/* 2. PLACED THE AUTOMATED PIE CHART HERE EXACTLY AS ORDERED BY PDF STEP 3 */}
-        {/* This is our new automated pie chart! */}
         <ExpenseChart />
 
-        {/* This is our old Recent Spending list */}
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Recent Spending (Click item to delete)</h2>
           <div style={styles.listContainer}>

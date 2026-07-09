@@ -20,10 +20,12 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    loadExpenses();
-  }, [loadExpenses]); // Now ESLint is happy!
-
+  uuseEffect(() => {
+  const initializeExpenses = async () => {
+    await loadExpenses();
+  };
+  initializeExpenses();
+}, [loadExpenses]);
   const startListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 

@@ -19,7 +19,7 @@ jobs:
       - name: Step 2 - Install Node.js (The Engine)
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Step 3 - Go into Frontend and install tools
         working-directory: ./frontend
